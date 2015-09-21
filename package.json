@@ -1,0 +1,24 @@
+{
+  "name": "remote-command-listener",
+  "version": "0.0.0",
+  "description": "",
+  "homepage": "https://github.com/ngyuki",
+  "author": "ngyuki <ngyuki.jp@ngyuki.jp@gmail.com> (https://github.com/ngyuki)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ngyuki/remote-command-listener"
+  },
+  "bugs": {
+    "url": "https://github.com/ngyuki/remote-command-listener/issues"
+  },
+  "license": "MIT",
+  "main": "./src/server",
+  "bin": {
+    "lsub": "./bin/lsub.js",
+    "lsubserver": "./bin/lsubserver.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {}
+}

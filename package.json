@@ -2,20 +2,20 @@
   "name": "remote-command-listener",
   "version": "0.0.0",
   "description": "",
-  "homepage": "https://github.com/ngyuki",
+  "homepage": "https://github.com/ngyuki/remote-launcher",
   "author": "ngyuki <ngyuki.jp@ngyuki.jp@gmail.com> (https://github.com/ngyuki)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ngyuki/remote-command-listener"
+    "url": "https://github.com/ngyuki/remote-launcher.git"
   },
   "bugs": {
-    "url": "https://github.com/ngyuki/remote-command-listener/issues"
+    "url": "https://github.com/ngyuki/remote-launcher/issues"
   },
   "license": "MIT",
-  "main": "./src/server",
+  "main": "./src/server.js",
   "bin": {
-    "lsub": "./bin/lsub.js",
-    "lsubserver": "./bin/lsubserver.js"
+    "remote-launcher-server": "./bin/remote-launcher-server.js",
+    "remote-launcher-subl": "./bin/remote-launcher-subl.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -10,7 +10,7 @@ if (process.env.SSH_CLIENT == null) {
 }
 
 var host = process.env.SSH_CLIENT.split(/ /)[0];
-var port = 12345;
+var port = 38715;
 
 var args = process.argv.slice(2).map(function(arg){
     if (fs.existsSync(arg)) {

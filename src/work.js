@@ -1,16 +1,18 @@
 var util = require('util');
 var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
-var fixargs = require('./fixargs');
-var escapeargs = require('./escapeargs');
+var replacePath = require('./replacePath');
 
-module.exports = function(commandAndArgs){
-    var command = commandAndArgs[0];
-    var args = fixargs(commandAndArgs.slice(1));
+module.exports = function(data){
+    var command = data.command;
+    var args = data.args.map(replacePath);
+    var cwd = replacePath(data.cwd);
 
-    console.log(util.format('exec ... %s %s', command, JSON.stringify(args)));
+    console.log(util.format('spawn ... (%s) %s %s', cwd, command, JSON.stringify(args)));
 
-    var commandline = escapeargs([command].concat(args)).join(" ");
-    exec(commandline);
-    //spawn(command, args, {stdio: 'ignore', detached: true});
+    spawn('cmd.exe', ['/S', '/C', command].concat(args), {
+        stdio: 'ignore',
+        detached: true,
+        cwd: cwd
+    });
 }

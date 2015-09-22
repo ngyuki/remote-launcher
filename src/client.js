@@ -2,7 +2,7 @@ var net = require('net');
 var path = require('path');
 var fs = require('fs');
 
-module.exports = function(name){
+module.exports = function(){
 
     if (process.env.SSH_CLIENT == null) {
         console.error("require environment variable \"SSH_CLIENT\"");
@@ -12,7 +12,9 @@ module.exports = function(name){
     var host = process.env.SSH_CLIENT.split(/ /)[0];
     var port = 38715;
 
-    var args = process.argv.slice(2).map(function(arg){
+    var command = process.argv[2];
+
+    var args = process.argv.slice(3).map(function(arg){
         if (fs.existsSync(arg)) {
             return path.resolve(arg);
         } else {
@@ -27,7 +29,7 @@ module.exports = function(name){
             sock.destroy();
         });
 
-        sock.write(JSON.stringify([name].concat(args)), function(){
+        sock.write(JSON.stringify([command].concat(args)), function(){
             sock.end();
         });
     });

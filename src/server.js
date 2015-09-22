@@ -2,6 +2,7 @@ var util = require('util');
 var net = require('net');
 var work = require('./work');
 var allowHosts = require('./../config').allowHosts;
+var inRange = require('range_check').inRange;
 
 module.exports = function(){
 
@@ -10,7 +11,7 @@ module.exports = function(){
     var server = net.createServer(function(sock){
         var list = [];
 
-        if (allowHosts.indexOf(sock.remoteAddress) < 0) {
+        if (inRange(sock.remoteAddress, allowHosts) == false) {
 
             console.log(util.format('deny ... %s:%s', sock.remoteAddress, sock.remotePort));
             sock.destroy();

@@ -1,6 +1,7 @@
 var net = require('net');
 var path = require('path');
 var fs = require('fs');
+var replacePath = require('./replacePath');
 
 module.exports = function(){
 
@@ -22,10 +23,18 @@ module.exports = function(){
         }
     });
 
+    var config = [];
+
+    var fn = path.join(process.env.HOME, '.remote-launcher');
+
+    if (fs.existsSync(fn)) {
+        config = require(fn);
+    }
+
     var data = {
         command: command,
-        args: args,
-        cwd: cwd,
+        args: args.map(function(str){ return replacePath(config, str) }),
+        cwd: replacePath(config, cwd),
     };
 
     var sock = net.createConnection(port, host, function(){

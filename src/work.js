@@ -1,12 +1,10 @@
 var util = require('util');
-var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
-var replacePath = require('./replacePath');
 
 module.exports = function(data){
     var command = data.command;
-    var args = data.args.map(replacePath);
-    var cwd = replacePath(data.cwd);
+    var args = data.args;
+    var cwd = data.cwd;
 
     console.log(util.format('spawn ... (%s) %s %s', cwd, command, JSON.stringify(args)));
 

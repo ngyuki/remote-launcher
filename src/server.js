@@ -1,7 +1,7 @@
 var util = require('util');
 var net = require('net');
 var work = require('./work');
-var allowHosts = require('./../config').allowHosts;
+var allowHosts = require('../config').allowHosts;
 var inRange = require('range_check').inRange;
 
 module.exports = function(){

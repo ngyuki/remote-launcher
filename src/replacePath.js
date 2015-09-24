@@ -1,7 +1,4 @@
-var replacePaths = require('./../config').replacePaths;
-
-module.exports = function(path){
-
+module.exports = function(replacePaths, path){
     replacePaths.some(function(m){
         var reg = new RegExp(m.pattern);
         if (reg.test(path)) {

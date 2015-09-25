@@ -8,9 +8,13 @@ module.exports = function(data){
 
     console.log(util.format('spawn ... (%s) %s %s', cwd, command, JSON.stringify(args)));
 
-    spawn('cmd.exe', ['/S', '/C', command].concat(args), {
+    var proc = spawn('cmd.exe', ['/S', '/C', command].concat(args), {
         stdio: 'ignore',
         detached: true,
         cwd: cwd
     });
+
+    proc.on('error', function(err){
+        console.log(util.format('error ... ' + err));
+    })
 }

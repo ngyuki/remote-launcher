@@ -3,25 +3,12 @@ var path = require('path');
 var fs = require('fs');
 var replacePath = require('./replacePath');
 
-module.exports = function(){
+module.exports = function(args){
 
     if (process.env.SSH_CLIENT == null) {
         console.error("require environment variable \"SSH_CLIENT\"");
         process.exit(1);
     }
-
-    var host = process.env.SSH_CLIENT.split(/ /)[0];
-    var port = 38715;
-    var cwd = process.cwd();
-    var command = process.argv[2];
-
-    var args = process.argv.slice(3).map(function(arg){
-        if (fs.existsSync(arg)) {
-            return path.resolve(arg);
-        } else {
-            return arg;
-        }
-    });
 
     var config = [];
 
@@ -31,9 +18,23 @@ module.exports = function(){
         config = require(fn);
     }
 
+    var host = process.env.SSH_CLIENT.split(/ /)[0];
+    var port = 38715;
+    var cwd = process.cwd();
+
+    var newArgs = args.map(function(arg){
+        if (fs.existsSync(arg)) {
+            return replacePath(config, path.resolve(arg));
+        } else {
+            return arg;
+        }
+    });
+
+    var command = newArgs.shift();
+
     var data = {
         command: command,
-        args: args.map(function(str){ return replacePath(config, str) }),
+        args: newArgs,
         cwd: replacePath(config, cwd),
     };
 

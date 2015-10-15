@@ -1,3 +1,4 @@
 #!/usr/bin/env node
 
-require('../src/client')();
+var args = process.argv.slice(2);
+require('../src/client')(args);

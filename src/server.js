@@ -34,7 +34,7 @@ module.exports = function(){
         }
     });
 
-    server.listen(port, function() {
+    server.listen(port, '0.0.0.0', function() {
         console.log(util.format('listening ... %s', port));
     });
 }

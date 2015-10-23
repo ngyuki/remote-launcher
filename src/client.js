@@ -24,7 +24,7 @@ module.exports = function(args){
 
     var newArgs = args.map(function(arg){
         if (fs.existsSync(arg)) {
-            return replacePath(config, path.resolve(arg));
+            return replacePath(config, fs.realpathSync(arg));
         } else {
             return arg;
         }

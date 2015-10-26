@@ -18,13 +18,14 @@ module.exports = function(args){
         config = require(fn);
     }
 
-    var host = process.env.SSH_CLIENT.split(/ /)[0];
+    var host = config.host || process.env.SSH_CLIENT.split(/ /)[0];
     var port = 38715;
     var cwd = process.cwd();
+    var map = config.map || {};
 
     var newArgs = args.map(function(arg){
         if (fs.existsSync(arg)) {
-            return replacePath(config, fs.realpathSync(arg));
+            return replacePath(map, fs.realpathSync(arg));
         } else {
             return arg;
         }
@@ -35,7 +36,7 @@ module.exports = function(args){
     var data = {
         command: command,
         args: newArgs,
-        cwd: replacePath(config, cwd),
+        cwd: replacePath(map, cwd),
     };
 
     var sock = net.createConnection(port, host, function(){

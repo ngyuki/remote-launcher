@@ -14,8 +14,9 @@
   "license": "MIT",
   "main": "./src/server.js",
   "bin": {
-    "remote-launcher-server": "./bin/remote-launcher-server.js",
-    "remote-launcher-subl": "./bin/remote-launcher-subl.js"
+    "remote-launcher": "./bin/remote-launcher.js",
+    "remote-launcher-link": "./bin/remote-launcher-link.js",
+    "remote-launcher-server": "./bin/remote-launcher-server.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

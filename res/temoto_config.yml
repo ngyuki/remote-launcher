@@ -1,0 +1,14 @@
+# common
+port: 38715
+
+# windows
+allow:
+    - 192.0.2.11
+    - 192.0.2.22
+    - 192.0.2.33
+
+# linux
+host: ore-no-pc
+
+mapping:
+  - { from: /home/oreore, to: \\ore-no-pc\oreore }

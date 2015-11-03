@@ -1,54 +1,56 @@
 var net = require('net');
 var path = require('path');
 var fs = require('fs');
-var replacePath = require('./replacePath');
+
+var config = require('./config');
+var replacePath = require('./replacePath').replacePath;
+
+function detectRemoteHost()
+{
+    if (process.env.SSH_CLIENT == null) {
+        throw Error("require environment variable \"SSH_CLIENT\"");
+    }
+    return process.env.SSH_CLIENT.split(/ /)[0];
+}
 
 module.exports = function(args){
 
-    if (process.env.SSH_CLIENT == null) {
-        console.error("require environment variable \"SSH_CLIENT\"");
-        process.exit(1);
-    }
+    var host = config.host || detectRemoteHost();
+    var port = config.port;
+    var cwd = replacePath(process.cwd());
+    var newArgs = args.concat();
+    var command = newArgs.shift();
 
-    var config = [];
-
-    var fn = path.join(process.env.HOME, '.remote-launcher');
-
-    if (fs.existsSync(fn)) {
-        config = require(fn);
-    }
-
-    var host = config.host || process.env.SSH_CLIENT.split(/ /)[0];
-    var port = 38715;
-    var cwd = process.cwd();
-    var map = config.map || {};
-
-    var newArgs = args.map(function(arg){
+    newArgs = newArgs.map(function(arg){
         if (fs.existsSync(arg)) {
-            return replacePath(map, fs.realpathSync(arg));
+            return replacePath(fs.realpathSync(arg));
         } else {
             return arg;
         }
     });
 
-    var command = newArgs.shift();
-
     var data = {
         command: command,
         args: newArgs,
-        cwd: replacePath(map, cwd),
+        cwd: cwd,
     };
+
+    var payload = JSON.stringify(data) + "\n";
 
     var sock = net.createConnection(port, host, function(){
 
         sock.on('error', function(err){
-            console.log(err);
+            process.stderr.write(err);
             sock.destroy();
         });
 
-        sock.write(JSON.stringify(data), function(){
-            sock.end();
+        sock.on('close', function(){
+            process.stdin.end();
         });
-    });
 
+        sock.pipe(process.stdout);
+        process.stdin.pipe(sock);
+
+        sock.write(payload);
+    });
 };

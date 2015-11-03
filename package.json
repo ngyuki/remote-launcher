@@ -1,27 +1,30 @@
 {
-  "name": "remote-launcher",
+  "name": "temoto",
   "version": "0.0.0",
   "description": "",
-  "homepage": "https://github.com/ngyuki/remote-launcher",
+  "homepage": "https://github.com/ngyuki/temoto",
   "author": "ngyuki <ngyuki.jp@ngyuki.jp@gmail.com> (https://github.com/ngyuki)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ngyuki/remote-launcher.git"
+    "url": "https://github.com/ngyuki/temoto.git"
   },
   "bugs": {
-    "url": "https://github.com/ngyuki/remote-launcher/issues"
+    "url": "https://github.com/ngyuki/temoto/issues"
   },
   "license": "MIT",
   "main": "./src/server.js",
   "bin": {
-    "remote-launcher": "./bin/remote-launcher.js",
-    "remote-launcher-link": "./bin/remote-launcher-link.js",
-    "remote-launcher-server": "./bin/remote-launcher-server.js"
+    "temoto": "./bin/temoto.js",
+    "temoto-exec": "./bin/temoto-exec.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "range_check": "0.0.5"
+    "js-yaml": "~3.4.3",
+    "lodash": "~3.10.1",
+    "nomnom": "~1.8.1",
+    "inquirer": "~0.11.0",
+    "iconv": "~2.1.11"
   }
 }

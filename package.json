@@ -14,8 +14,7 @@
   "license": "MIT",
   "main": "./src/server.js",
   "bin": {
-    "temoto": "./bin/temoto.js",
-    "temoto-exec": "./bin/temoto-exec.js"
+    "temoto": "./bin/temoto.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,7 +22,6 @@
   "dependencies": {
     "js-yaml": "~3.4.3",
     "lodash": "~3.10.1",
-    "nomnom": "~1.8.1",
     "inquirer": "~0.11.0"
   }
 }

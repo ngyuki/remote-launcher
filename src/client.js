@@ -13,11 +13,23 @@ function detectRemoteHost()
     return process.env.SSH_CLIENT.split(/ /)[0];
 }
 
+function detectCurrentworkingDirectory()
+{
+    var orig = process.cwd();
+    var cwd = replacePath(orig);
+
+    if (orig === cwd) {
+        return null;
+    } else {
+        return cwd;
+    }
+}
+
 module.exports = function(args){
 
     var host = config.host || detectRemoteHost();
     var port = config.port;
-    var cwd = replacePath(process.cwd());
+    var cwd = detectCurrentworkingDirectory();
     var newArgs = args.concat();
     var command = newArgs.shift();
 

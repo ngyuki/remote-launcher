@@ -45,7 +45,7 @@ function exec()
 
 var opt = process.argv[2];
 
-if (opt && opt[0] != '-') {
+if ((opt == null) || (opt[0] != '-')) {
     exec();
     return;
 }

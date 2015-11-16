@@ -11,7 +11,7 @@ module.exports = function(param, sock){
     var args = param.args;
     var cwd = param.cwd;
 
-    if (utils.isNetworkDrive(cwd)) {
+    if (!utils.isLocalDrive(cwd)) {
         cwd = process.env.HOME;
     }
 

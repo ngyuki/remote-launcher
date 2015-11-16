@@ -45,9 +45,13 @@ function saveYaml(file, data)
     fs.writeFileSync(file, yaml.safeDump(data));
 }
 
-function isNetworkDrive(p)
+function isLocalDrive(p)
 {
     if (path.normalize(p).substr(0, 2) == '\\\\') {
+        // Windows Network Drive
+        return true;
+    } else if (path.normalize(p).substr(0, 2) == '/') {
+        // Linux Directory
         return true;
     } else {
         return false;
@@ -80,6 +84,6 @@ module.exports = {
     loadYaml: loadYaml,
     loadYamlTry: loadYamlTry,
     saveYaml: saveYaml,
-    isNetworkDrive: isNetworkDrive,
+    isLocalDrive: isLocalDrive,
     promptFileOverwrite: promptFileOverwrite,
 };

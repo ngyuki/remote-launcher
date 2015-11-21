@@ -9,6 +9,5 @@ allow:
 
 # linux
 host: ore-no-pc
-
 mapping:
   - { from: /home/oreore, to: \\ore-no-pc\oreore }

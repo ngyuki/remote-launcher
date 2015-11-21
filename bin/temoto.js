@@ -43,6 +43,28 @@ function exec()
     require('../src/client')(args);
 }
 
+function help()
+{
+    usage();
+
+    var path = require('path');
+    var fs = require('fs');
+    var fn = path.join(path.dirname(__dirname), 'res/temoto_config.yml');
+
+    /************************************************************
+     * Example configuration file (~/.temoto_config):
+     ************************************************************/
+
+     var text = arguments.callee.toString()
+        .match(/\/\*\*+\s*$([\s\S]+)^\s*\*+\//m)[1]
+        .replace(/^\s+\* ?/gm, '');
+
+    var example = fs.readFileSync(fn).toString();
+
+    console.log(text);
+    console.log(example.replace(/^/gm, '    '));
+}
+
 function parseArguments()
 {
     var path = require('path');
@@ -76,6 +98,11 @@ switch (opt) {
     case '--local':
     case '-l':
         local();
+        return;
+
+    case '--help':
+    case '-h':
+        help();
         return;
 
     default:

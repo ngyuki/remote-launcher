@@ -84,6 +84,11 @@ var args = parseArguments();
 
 var opt = args[0];
 
+if (opt == null) {
+    usage();
+    return;
+}
+
 if (opt[0] != '-') {
     exec();
     return;

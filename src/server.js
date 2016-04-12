@@ -1,9 +1,8 @@
-var util = require('util');
-var net = require('net');
-var events = require('events');
+var sys = require('util');
+var http = require('http');
 
 var config = require('./config');
-var work = require('./work');
+var exec = require('./work');
 
 function isAllowAddress(addr)
 {
@@ -15,57 +14,45 @@ function isAllowAddress(addr)
     });
 }
 
-function connectionHandler(sock)
+function connectionHandler(socket)
 {
-    if (isAllowAddress(sock.remoteAddress) == false) {
-        console.log(util.format('deny ... %s:%s', sock.remoteAddress, sock.remotePort));
-        sock.destroy();
+    var addr = socket.conn.remoteAddress;
+    var logprefix = sys.format('[%s]', addr);
+
+    function log(str)
+    {
+        console.log.apply(console, [logprefix].concat(
+            Array.apply(null, arguments)
+        ));
+    }
+
+    if (isAllowAddress(addr) == false) {
+        log('deny ...', addr);
+        socket.disconnect();
         return;
     }
 
-    console.log(util.format('allow ... %s:%s', sock.remoteAddress, sock.remotePort));
+    log('allow ...', addr);
 
-    var list = [];
-
-    var handler = function(data){
-        var str = data.toString();
-        var pos = str.indexOf('\n');
-        if (pos < 0) {
-            list.push(str);
-            return;
-        }
-
-        handler = function(data){};
-
-        list.push(str.substr(0, pos));
-        if (list.length == 0) {
-            sock.destroy();
-            return;
-        }
-
-        var param = JSON.parse(list.join(''));
-
-        work(param, sock);
-
-        str = str.substr(pos);
-
-        if (str.length > 0) {
-            sock.emit('data', str);
-        }
-    };
-
-    sock.on('error', function(err){
-        console.log(util.format('error ... ' + err));
+    socket.on('disconnect', function(){
+        log('disconnect');
+        socket.disconnect();
     });
 
-    sock.on('data', function(data){
-        handler(data);
+    socket.on('exec', function(commandArgs, cwd){
+        exec(commandArgs, cwd, socket, log);
     });
 }
 
 module.exports = function(){
-    var server = net.createServer({allowHalfOpen:true}, connectionHandler);
+
+    var server = require('http').createServer();
+
     server.listen(config.port, '0.0.0.0', function() {
-        console.log(util.format('listening ... %s', config.port));
+        console.log('listening ...', config.port);
     });
+
+    var io = require('socket.io').listen(server);
+
+    io.sockets.on('connection', connectionHandler);
 }

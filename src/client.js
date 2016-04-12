@@ -1,6 +1,6 @@
-var net = require('net');
-var path = require('path');
+var sys = require('util');
 var fs = require('fs');
+var client = require('socket.io-client');
 
 var config = require('./config');
 var replacePath = require('./replacePath').replacePath;
@@ -25,6 +25,63 @@ function detectCurrentworkingDirectory()
     }
 }
 
+function execCommand(socket, commandArgs, cwd)
+{
+    return function(){
+        var exitcode = 255;
+
+        socket.emit("exec", commandArgs, cwd);
+
+        ['SIGHUP', 'SIGINT', 'SIGTERM'].forEach(function(sig){
+            process.on(sig, function(){
+                socket.emit('signal', sig);
+            });
+        });
+
+        process.stdin.on('data', function(data){
+            socket.emit('stdin', data);
+        });
+
+        process.stdin.on('end', function(){
+            socket.emit('stdin.end');
+        });
+
+        process.stdin.on('close', function(){});
+
+        process.stdin.on('error', function(err){
+            console.error(err.message);
+            socket.disconnect();
+        });
+
+        process.stdout.on('error', function(err){
+            console.error(err.message);
+            socket.disconnect();
+        });
+
+        process.stderr.on('error', function(err){
+            console.error(err.message);
+            socket.disconnect();
+        });
+
+        socket.on('stdout', function(data){
+            process.stdout.write(data);
+        });
+
+        socket.on('stderr', function(data){
+            process.stderr.write(data);
+        });
+
+        socket.on('exit', function(code){
+            exitcode = code;
+            socket.disconnect();
+        });
+
+        socket.on('disconnect', function(){
+            process.exit(exitcode);
+        });
+    };
+}
+
 module.exports = function(args){
 
     var host = config.host || detectRemoteHost();
@@ -41,28 +98,11 @@ module.exports = function(args){
         }
     });
 
-    var data = {
-        command: command,
-        args: newArgs,
-        cwd: cwd,
-    };
+    var commandArgs = [command].concat(newArgs);
 
-    var payload = JSON.stringify(data) + "\n";
+    var url = 'http://' + host + ':' + port;
 
-    var sock = net.createConnection(port, host, function(){
+    var socket = client.connect(url, { reconnection:false });
 
-        sock.on('error', function(err){
-            process.stderr.write(err);
-            sock.destroy();
-        });
-
-        sock.on('close', function(){
-            process.stdin.end();
-        });
-
-        sock.pipe(process.stdout);
-        process.stdin.pipe(sock);
-
-        sock.write(payload);
-    });
+    socket.on('connect', execCommand(socket, commandArgs, cwd));
 };

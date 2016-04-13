@@ -1,9 +1,9 @@
+var path = require('path');
+var fs = require('fs');
 var args = require('./args');
 
 function help()
 {
-    var path = require('path');
-    var fs = require('fs');
     var fn = path.join(path.dirname(__dirname), 'res/temoto_config.yml');
 
     var text = `\nConfiguration file (~/.temoto_config):\n`;
@@ -12,6 +12,12 @@ function help()
     console.error(args.usage());
     console.error(text);
     console.error(example.replace(/^/gm, '    '));
+}
+
+function version()
+{
+    let version = require(path.resolve(__dirname, '..', 'package.json')).version;
+    console.error(`temoto.js ${version}`);
 }
 
 (function(){
@@ -37,6 +43,10 @@ function help()
 
         case 'help':
             help();
+            return;
+
+        case 'version':
+            version();
             return;
 
         default:

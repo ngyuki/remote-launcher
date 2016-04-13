@@ -1,9 +1,9 @@
 var assert = require('assert');
-var replacePath = require('../src/replacePath');
+var mapper = require('../src/mapper');
 
-describe('replacePath', function () {
-    it('replacePrefix pattern tests', function () {
-        var r = replacePath.replacePrefix;
+describe('mapper', () => {
+    it('replacePrefix pattern tests', () => {
+        var r = mapper.replacePrefix;
         assert.equal(r("/path/to/devel/oreore", "/path/to/devel",  "D:\\devel"),   "D:\\devel\\oreore");
         assert.equal(r("/path/to/devel/oreore", "/path/to/devel/", "D:\\devel"),   "D:\\devel\\oreore");
         assert.equal(r("/path/to/devel/oreore", "/path/to/devel",  "D:\\devel\\"), "D:\\devel\\oreore");

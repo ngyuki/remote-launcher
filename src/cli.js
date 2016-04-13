@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 function usage()
 {
     /************************************************************
@@ -60,7 +58,7 @@ function parseArguments()
     var path = require('path');
     var args;
 
-    if (path.basename(process.argv[1], '.js') === path.basename(__filename, '.js')) {
+    if (path.basename(process.argv[1], '.js') === path.basename(process.mainModule.filename, '.js')) {
         args = process.argv.slice(2);
     } else {
         // for symlink

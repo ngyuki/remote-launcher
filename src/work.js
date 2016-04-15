@@ -1,4 +1,5 @@
 var sys = require('util');
+var path = require('path');
 var spawn = require('child_process').spawn;
 
 module.exports = function(commandArgs, cwd, socket, log){
@@ -12,7 +13,9 @@ module.exports = function(commandArgs, cwd, socket, log){
     }
 
     log('exec', sys.format('(%s)', cwd), commandArgs);
-    var proc = spawn('bash', ['-c', 'cd "$1" && shift && "$@"', '--', cwd].concat(commandArgs), {});
+    var script = path.resolve(__dirname, '..', 'res/exec.sh');
+    var proc = spawn('bash', [script, cwd].concat(commandArgs), {});
+    log('pid', proc.pid);
 
     proc.on('error', function(err){
         log('proc.error', err.message);
@@ -60,8 +63,10 @@ module.exports = function(commandArgs, cwd, socket, log){
         if (sig === 'SIGINT') {
             sig = 'SIGTERM';
         }
-        proc.kill(sig);
-    });
+        log('kill', sig, proc.pid);
+        spawn('bash', ['-c', 'kill "-$1" "$2"', '--', sig, proc.pid]);
+        //proc.kill(sig);
+   });
 
     socket.on('stdin', function(data){
         log('stdin', data.length);

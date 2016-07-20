@@ -30,15 +30,15 @@ function version()
 
     switch (opts.command) {
         case 'exec':
-            require('../src/client')(opts.args);
+            require('./client')(opts.args);
             return
 
         case 'server':
-            require('../src/server')();
+            require('./server')();
             return;
 
         case 'local':
-            require('../src/mapper.js').writeLocal(process.cwd());
+            require('./mapper.js').writeLocal(process.cwd());
             return;
 
         case 'help':

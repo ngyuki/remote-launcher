@@ -1,5 +1,20 @@
 # メモ
 
+## Native thread-sleep not available.
+
+v0.10.42 で下記のメッセージが表示される。
+
+```
+Native thread-sleep not available.
+This will result in much slower performance, but it will still work.
+You should re-install spawn-sync or upgrade to the lastest version of node if possible.
+Check /usr/lib/node_modules/temoto/node_modules/spawn-sync/error.log for more details
+```
+
+inquirer から依存している spawn-sync の問題？
+
+とりあえず、ごく限定された状況でしか inquirer は必要ないので無視。
+
 ## bash へのシグナル
 
 msys の bash に対して `proc.kill('SIGTERM')` しても強制終了になるだけで実際のシグナルは受け取らない。

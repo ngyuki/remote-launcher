@@ -2,7 +2,6 @@ var util = require('util');
 var fs = require('fs');
 var path = require('path');
 var yaml = require('js-yaml');
-var inquirer = require("inquirer");
 
 function findUp(dir, file)
 {
@@ -72,7 +71,7 @@ function promptFileOverwrite(fn, callback)
         default: false,
     };
 
-    inquirer.prompt([question], function(answers){
+    require("inquirer").prompt([question], function(answers){
         if (answers.confirm) {
             callback(fn);
         }

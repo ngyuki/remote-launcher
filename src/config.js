@@ -8,6 +8,6 @@ var defaults = {
     mapping: [],
 };
 
-var config = utils.loadYamlTry(process.env.HOME, '.temoto_config');
-
+var home = process.env.HOME || process.env.USERPROFILE;
+var config = utils.loadYaml(home, '.temoto_configxx');
 module.exports = _.extend(defaults, config);
